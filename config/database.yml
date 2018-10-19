@@ -1,0 +1,23 @@
+default: &default
+  adapter: sqlserver
+  pool: 16
+  port : 1433
+  database : db_crud
+  username : sa
+  password : Test@123
+
+development:
+  <<: *default
+  host: localhost
+
+integration:
+  <<: *default
+  host : localhost
+
+staging:
+  <<: *default
+  host : localhost
+
+production:
+  <<: *default
+  host : localhost
