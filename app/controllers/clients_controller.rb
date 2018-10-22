@@ -1,7 +1,10 @@
 class ClientsController < ActionController::Base
 
     def index
-        clients = Client.all
+        clients = Client.all.as_json
+        clients.map { |client|
+            client['addresses'] = Address.where(client_id: client['id'])
+        }
 
         render json: clients
     end

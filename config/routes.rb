@@ -7,4 +7,12 @@ Rails.application.routes.draw do
       delete :destroy
     end
   end
+
+  resources :addresses, only: [:index, :show, :show_by_client, :create, :destroy, :update] do
+    collection do
+      put :update
+      delete :destroy
+      get :show_by_client
+    end
+  end
 end
