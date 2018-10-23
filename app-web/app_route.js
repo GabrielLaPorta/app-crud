@@ -2,7 +2,7 @@
     "use strict";
 
     angular
-        .module("route", ["ui.router"])
+        .module("route", ["ui.router", "templates"])
         .config((
             $stateProvider,
             $locationProvider,
@@ -13,7 +13,7 @@
 
             $urlMatcherFactoryProvider.caseInsensitive(true);
 
-            $urlRouterProvider.otherwise("http://localhost:3000/clients");
+            $urlRouterProvider.otherwise("/app/clients");
 
             $stateProvider
                 .state("clients", {
@@ -33,8 +33,8 @@
                             dynamic: true
                         }
                     },
-                    templateUrl: "../clients-template.html",
-                    url: "http://localhost:3000/clients"
+                    templateUrl: "../app-web/screens/clients/clients-template.html",
+                    url: "/app/clients?id&name&email&age"
                 });
         });
 })(window.angular);
