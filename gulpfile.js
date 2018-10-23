@@ -5,10 +5,16 @@ const templateCache = require('gulp-angular-templatecache');
 const scripts = require('./scripts');
 const styles = require('./styles');
 
-gulp.task('css', function () {
+gulp.task('cssVendor', function () {
 	gulp.src(styles)
 		.pipe(concat('libs.css'))
 		.pipe(gulp.dest('./public/assets/stylesheets'))
+});
+
+gulp.task('css', function() {
+    gulp.src('./app-web/**/*.css')
+        .pipe(concat('app.css'))
+        .pipe(gulp.dest('./public/assets/stylesheets'))
 });
 
 gulp.task('jsVendor', function () {
@@ -30,7 +36,7 @@ gulp.task('templatesJs', function () {
 });
 
 gulp.task('build', function () {
-	gulp.start(['css', 'jsVendor', 'js', 'templatesJs']);
+	gulp.start(['css', 'cssVendor', 'jsVendor', 'js', 'templatesJs']);
 });
 
 gulp.task('default', ['build']);
