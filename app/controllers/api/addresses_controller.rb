@@ -1,4 +1,4 @@
-class AddressesController < ActionController::Base
+class Api::AddressesController < ActionController::Base
     
     def index
         addresses = Address.all.as_json

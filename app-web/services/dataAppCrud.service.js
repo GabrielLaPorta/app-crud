@@ -13,7 +13,7 @@
         };
 
         function clientResource() {
-            return $resource("http://localhost:3000/clients");
+            return $resource("http://localhost:3000/api/clients");
         }
     }
 })(window.angular);

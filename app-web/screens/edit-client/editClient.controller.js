@@ -3,14 +3,17 @@
 
     angular
         .module("appCrud")
-        .controller("ClientsController", ClientsController);
+        .controller("EditClientsController", EditClientsController);
 
-        ClientsController.$inject = ["dataAppCrudService", "$state"];
+        EditClientsController.$inject = ["dataAppCrudService", "$state"];
 
-        function ClientsController(dataAppCrudService, $state) {
+        function EditClientsController(dataAppCrudService, $state) {
             const vm = this;
 
-            vm.editClientAreaOpened = false;
+            vm.client.id = $state.params.id;
+            vm.client.name = $state.params.name;
+            vm.client.email = $state.params.email;
+            vm.client.age = $state.params.age;
 
             getAllClients();
 
@@ -48,13 +51,6 @@
                     vm.editClientAreaOpened = false;
                 }
             };
-
-            vm.editClientPageGo = (client) => {
-                $state.params.id = client.id;
-                $state.params.name = client.name;
-                $state.params.email = client.email;
-                $state.params.age = client.age;
-                $state.go("editClients", );
-            };            
+            
         }
 })(window.angular);

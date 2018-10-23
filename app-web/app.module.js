@@ -2,6 +2,7 @@
     "use strict";
 
     angular.module("appCrud", [
-        "route"
+        "route",
+        "ngResource"
     ]);
 })(window.angular);

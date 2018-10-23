@@ -13,7 +13,7 @@
 
             $urlMatcherFactoryProvider.caseInsensitive(true);
 
-            $urlRouterProvider.otherwise("/app/clients");
+            $urlRouterProvider.otherwise("/clients");
 
             $stateProvider
                 .state("clients", {
@@ -33,8 +33,27 @@
                             dynamic: true
                         }
                     },
-                    templateUrl: "../app-web/screens/clients/clients-template.html",
-                    url: "/app/clients?id&name&email&age"
+                    templateUrl: "screens/clients/clients-template.html",
+                    url: "/clients?id&name&email&age"
+                }).state("editClients", {
+                    controller: "EditClientsController",
+                    controllerAs: "vm",
+                    params: {
+                        id: {
+                            dynamic: true
+                        },
+                        name: {
+                            dynamic: true
+                        },
+                        email: {
+                            dynamic: true
+                        },
+                        age: {
+                            dynamic: true
+                        }
+                    },
+                    templateUrl: "screens/edit-client/edit-client-template.html",
+                    url: "/editClients?id&name&email&age"
                 });
         });
 })(window.angular);

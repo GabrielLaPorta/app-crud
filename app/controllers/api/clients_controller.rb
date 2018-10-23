@@ -1,4 +1,4 @@
-class ClientsController < ActionController::Base
+class Api::ClientsController < ActionController::Base
 
     def index
         clients = Client.all.as_json
