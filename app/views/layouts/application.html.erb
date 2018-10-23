@@ -3,23 +3,17 @@
 
 <head>
     <base href="/" />
-    <link media="all" rel="stylesheet" href="">
+    <link media="all" rel="stylesheet" href="assets/stylesheets/libs.css">
+    <link media="all" rel="stylesheet" href="assets/stylesheets/app.css">
     <title>CRUD - People</title>
 </head>
 
 <body class="" data-ng-app="appCrud">
     <div ui-view></div>
     <!-- Libs -->
-    <script src="node_modules/angular/angular.js"></script>
-    <script src="/app-crud/node_modules/@uirouter/angularjs/release/angular-ui-router.js"></script>
-    <script src="/app-crud/node_modules/angular-resource/angular-resource.js"></script>
-    <!-- Modules -->
-    <script src="/app-crud/app-web/app.module.js"></script>
-    <script src="/app-crud/app-web/app.route.js"></script>
-    <!-- Controllers -->
-    <script src="/app-crud/app-web/screens/clients/clients.controller.js"></script>
-    <!-- Services -->
-    <script src="/app-crud/app-web/services/dataAppCrud.service.js"></script>
+  <script src="assets/javascripts/vendor.js"></script>
+  <script src="assets/templates/templates.js"></script>
+  <script src="assets/javascripts/scripts.js"></script>
 </body>
 
 </html>
