@@ -6,10 +6,11 @@
         .config(['$resourceProvider', $resourceProvider => {
             $resourceProvider.defaults.actions = {
                 create: {
-                    method: "POST"
+                    method: 'POST'
                 },
                 get: {
-                    method: "GET"
+                    method: 'GET',
+                    params: {id: true}
                 },
                 getAll: {
                     method: 'GET',
@@ -18,7 +19,7 @@
                 update: {
                     method: 'PUT'
                 },
-                remove: {
+                delete: {
                     method: 'DELETE'
                 }
             };

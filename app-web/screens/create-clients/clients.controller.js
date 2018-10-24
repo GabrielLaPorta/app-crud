@@ -41,20 +41,24 @@
             };
 
             vm.openCreateClientArea = () => {
-                if(vm.editClientAreaOpened === false){
-                vm.editClientAreaOpened = true;
-                }
-                else{
-                    vm.editClientAreaOpened = false;
-                }
+                vm.editClientAreaOpened = !vm.editClientAreaOpened;
             };
 
             vm.editClientPageGo = (client) => {
-                $state.params.id = client.id;
-                $state.params.name = client.name;
-                $state.params.email = client.email;
-                $state.params.age = client.age;
-                $state.go("editClients", );
+                $state.go("editClients", {id: client.id});
+            };
+
+            vm.deleteClient = (client) => {
+                dataAppCrudService
+                    .clientResource()
+                    .delete(client)
+                    .$promise
+                    .then(response => {
+                        $state.reload();
+                        console.log(`Client ${response.name} deleted`);
+                    }).catch(error => {
+                        console.error(error);
+                    });
             };            
         }
 })(window.angular);

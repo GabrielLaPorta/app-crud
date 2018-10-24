@@ -16,6 +16,13 @@ Rails.application.routes.draw do
         get :show_by_client
       end
     end
+
+    resources :classes, only: [:index, :show, :create, :destroy, :update] do
+      collection do
+        put :update
+        delete :destroy
+      end
+    end
   end
   
   get '/*path' => 'application#index'

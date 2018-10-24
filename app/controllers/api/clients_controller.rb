@@ -1,19 +1,11 @@
 class Api::ClientsController < ActionController::Base
 
     def index
-        clients = Client.all.as_json
-        clients.map { |client|
-            client['addresses'] = Address.where(client_id: client['id'])
-        }
-
-        render json: clients
+        render json: Client.all.as_json({include: :addresses})
     end
     
     def show
-        client = Client.find(params[:id]).as_json
-        addresses = Address.where(client_id: params[:id])
-        client['addresses'] = addresses
-        render json: client
+        render json: Client.find(params[:id]).as_json({include: :addresses})
     end
 
     def create

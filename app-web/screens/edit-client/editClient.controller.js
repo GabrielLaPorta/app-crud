@@ -9,48 +9,81 @@
 
         function EditClientsController(dataAppCrudService, $state) {
             const vm = this;
+            
+            const clientId = $state.params.id;
+            
+            vm.editAddressAreaOpened = false;
 
-            vm.client.id = $state.params.id;
-            vm.client.name = $state.params.name;
-            vm.client.email = $state.params.email;
-            vm.client.age = $state.params.age;
+            getClient();
 
-            getAllClients();
-
-            function getAllClients() {
+            function getClient() {
                 dataAppCrudService
                     .clientResource()
-                    .getAll()
+                    .get({id: clientId})
                     .$promise
                     .then(response => {
-                        vm.clients = response;
+                        vm.client = response;
                     })
                     .catch(error => {
                         console.error(error);
                     });
             };
 
-            vm.createClient = () => {
+            vm.updateClient = () => {
                 dataAppCrudService
                     .clientResource()
-                    .create(vm.client)
+                    .update(vm.client)
                     .$promise
                     .then(response => {
-                        $state.reload();
-                        console.log(`Client ${response.name} created`);
+                        $state.go("clients");
+                        console.log(`Client ${response.name}`);
                     }).catch(error => {
                         console.error(error);
                     });
             };
 
-            vm.openCreateClientArea = () => {
-                if(vm.editClientAreaOpened === false){
-                vm.editClientAreaOpened = true;
-                }
-                else{
-                    vm.editClientAreaOpened = false;
-                }
+            vm.openCreateAddressArea = () => {
+                vm.editAddressAreaOpened = !vm.editAddressAreaOpened;
+                vm.address = {
+                    action: "insert",
+                    client_id: clientId
+                };
             };
-            
+
+            vm.saveAddress = () => {
+                dataAppCrudService
+                    .addressResource()[getSaveAddressAction()](vm.address)
+                    .$promise
+                    .then(response => {
+                        $state.reload();
+                        console.log(`Address ${response.address}`);
+                    }).catch(error => {
+                        console.error(error);
+                    });
+            };
+
+            vm.openEditAddressArea = (address) => {
+                vm.editAddressAreaOpened = true;
+                vm.address = angular.copy(address);
+                vm.address.action = "update";
+            };
+
+            vm.deleteAddress = (address) => {
+                dataAppCrudService
+                .addressResource()
+                .delete(address)
+                .$promise
+                .then(response => {
+                    $state.reload();
+                    console.log(`Address ${response.address} deleted`);
+                }).catch(error => {
+                    console.error(error);
+                });
+            };
+
+            function getSaveAddressAction() {
+                return vm.address.action === "insert" ? "create" : "update";
+            }
+
         }
 })(window.angular);

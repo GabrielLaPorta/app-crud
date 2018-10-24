@@ -22,38 +22,20 @@
                     params: {
                         id: {
                             dynamic: true
-                        },
-                        name: {
-                            dynamic: true
-                        },
-                        email: {
-                            dynamic: true
-                        },
-                        age: {
-                            dynamic: true
                         }
                     },
-                    templateUrl: "screens/clients/clients-template.html",
-                    url: "/clients?id&name&email&age"
+                    templateUrl: "screens/create-clients/clients-template.html",
+                    url: "/clients"
                 }).state("editClients", {
                     controller: "EditClientsController",
                     controllerAs: "vm",
                     params: {
                         id: {
                             dynamic: true
-                        },
-                        name: {
-                            dynamic: true
-                        },
-                        email: {
-                            dynamic: true
-                        },
-                        age: {
-                            dynamic: true
                         }
                     },
                     templateUrl: "screens/edit-client/edit-client-template.html",
-                    url: "/editClients?id&name&email&age"
+                    url: "/clients/:id"
                 });
         });
 })(window.angular);

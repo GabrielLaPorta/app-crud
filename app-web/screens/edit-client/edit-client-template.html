@@ -1,0 +1,50 @@
+<div>
+    <h2>Client</h2>
+    <form novalidate>
+        <label>Name</label>
+        <input type="text" data-ng-model="vm.client.name">
+        <label>E-mail</label>
+        <input type="email" data-ng-model="vm.client.email">
+        <label>Age</label>
+        <input type="number" data-ng-model="vm.client.age">
+        <button data-ng-click="vm.updateClient()">Save</button>
+    </form>
+</div>
+<div>
+    <button data-ng-click="vm.openCreateAddressArea()">Create Address</button>
+    <form data-ng-if="vm.editAddressAreaOpened" novalidate>
+        <label>Address</label>
+        <input type="text" data-ng-model="vm.address.address">
+        <label>City</label>
+        <input type="text" data-ng-model="vm.address.city">
+        <label>Zip Code</label>
+        <input type="text" data-ng-model="vm.address.zip_code">
+        <button data-ng-click="vm.saveAddress()">Save</button>
+    </form>
+</div>
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>Zip Code</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-ng-repeat="address in vm.client.addresses">
+                <td>{{address.id}}</td>
+                <td>{{address.address}}</td>
+                <td>{{address.city}}</td>
+                <td>{{address.zip_code}}</td>
+                <td>
+                    <button data-ng-click="vm.openEditAddressArea(address)">Edit</button>
+                </td>
+                <td>
+                    <button data-ng-click="vm.deleteAddress(address)">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
