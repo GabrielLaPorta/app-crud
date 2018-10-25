@@ -1,4 +1,4 @@
-class Api::ClassesController < ActionController::Base
+class Api::ClassesController < ApplicationController
     
     def index
         classes = Classes.all.as_json

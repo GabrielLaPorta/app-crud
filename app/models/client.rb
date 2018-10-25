@@ -1,4 +1,4 @@
-class Client < ActiveRecord::Base
+class Client < ApplicationRecord
     has_many :addresses
 
     self.table_name = 'Clients'

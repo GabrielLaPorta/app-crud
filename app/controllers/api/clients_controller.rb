@@ -1,4 +1,4 @@
-class Api::ClientsController < ActionController::Base
+class Api::ClientsController < ApplicationController
 
     def index
         render json: Client.all.as_json({include: :addresses})
