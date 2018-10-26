@@ -1,31 +1,44 @@
-<div>
+<div class="container-fluid" v>
     <h2>Client</h2>
+    <a class="btn btn-secondary" ui-sref="clients">◄</a>
     <form novalidate>
-        <label>Name</label>
-        <input type="text" data-ng-model="vm.client.name">
-        <label>E-mail</label>
-        <input type="email" data-ng-model="vm.client.email">
-        <label>Age</label>
-        <input type="number" data-ng-model="vm.client.age">
-        <button data-ng-click="vm.updateClient()">Save</button>
+        <div class="form-group">
+            <label>Name</label>
+            <input class="form-control" type="text" data-ng-model="vm.client.name">
+        </div>
+        <div class="form-group">
+            <label>E-mail</label>
+            <input class="form-control" type="email" data-ng-model="vm.client.email">
+        </div>
+        <div class="form-group">
+            <label>Age</label>
+            <input class="form-control" type="number" data-ng-model="vm.client.age">
+        </div>
+        <button class="btn btn-primary" data-ng-click="vm.updateClient()">Save</button>
     </form>
 </div>
-<div>
-    <button data-ng-click="vm.openCreateAddressArea()">Create Address</button>
+<div class="container-fluid">
+    <button class="btn btn-secondary" data-ng-click="vm.openCreateAddressArea()">Create Address</button>
     <form data-ng-if="vm.editAddressAreaOpened" novalidate>
-        <label>Address</label>
-        <input type="text" data-ng-model="vm.address.address">
-        <label>City</label>
-        <input type="text" data-ng-model="vm.address.city">
-        <label>Zip Code</label>
-        <input type="text" data-ng-model="vm.address.zip_code">
-        <button data-ng-click="vm.saveAddress()">Save</button>
+        <div class="form-group">
+            <label>Address</label>
+            <input class="form-control" type="text" data-ng-model="vm.address.address">
+        </div>
+        <div class="form-group">
+            <label>City</label>
+            <input class="form-control" type="text" data-ng-model="vm.address.city">
+        </div>
+        <div class="form-group">
+            <label>Zip Code</label>
+            <input class="form-control" type="text" data-ng-model="vm.address.zip_code">
+        </div>
+        <button class="btn btn-primary" data-ng-click="vm.saveAddress()">Save</button>
     </form>
 </div>
-<div>
-    <table>
+<div class="container-fluid">
+    <table class="table table-striped">
         <thead>
-            <tr>
+            <tr class="table-primary">
                 <th>Id</th>
                 <th>Address</th>
                 <th>City</th>
@@ -38,11 +51,11 @@
                 <td>{{address.address}}</td>
                 <td>{{address.city}}</td>
                 <td>{{address.zip_code}}</td>
-                <td>
-                    <button data-ng-click="vm.openEditAddressArea(address)">Edit</button>
+                <td style="width: 79px">
+                    <button class="btn btn-info" data-ng-click="vm.openEditAddressArea(address)">Edit</button>
                 </td>
-                <td>
-                    <button data-ng-click="vm.deleteAddress(address)">Delete</button>
+                <td style="width: 98px">
+                    <button class="btn btn-danger" data-ng-click="vm.deleteAddress(address)">Delete</button>
                 </td>
             </tr>
         </tbody>

@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: 'json' } do
     resources :clients, only: [:index, :show, :create, :destroy, :update] do
       collection do
+        get :index_with_classes
+        get :show_with_classes
         put :update
         delete :destroy
       end
@@ -18,6 +20,13 @@ Rails.application.routes.draw do
     end
 
     resources :classes, only: [:index, :show, :create, :destroy, :update] do
+      collection do
+        put :update
+        delete :destroy
+      end
+    end
+
+    resources :client_classes, only: [:index, :show, :create, :destroy, :update] do
       collection do
         put :update
         delete :destroy
