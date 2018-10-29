@@ -24,7 +24,8 @@ class Client < ApplicationRecord
 
         result.rows.each do |client|
             if client[1]
-
+            end
+        end
         return result
 
     end
@@ -51,4 +52,3 @@ class Client < ApplicationRecord
         connection.exec_query("INSERT INTO Classes VALUES ('#{name_class}', '#{description}')")
     end
 end
-
