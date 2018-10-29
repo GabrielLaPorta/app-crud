@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       collection do
         get :index_with_classes
         get :show_with_classes
+        post :create_class
         put :update
         delete :destroy
       end

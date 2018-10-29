@@ -1,10 +1,10 @@
 class Api::ClientsController < ApplicationController
 
-    def index_with_classes
-        clients = Client.index_with_classes
+    # def index_with_classes
+    #     clients = Client.index_with_classes
 
-        render json: clients
-    end
+    #     render json: clients
+    # end
 
     def index
         render json: Client.all.as_json({include: :addresses})
@@ -50,8 +50,14 @@ class Api::ClientsController < ApplicationController
     end
 
     def show_with_classes
-        client = Client.show_with_classes(params[:id]).as_json
+        client = Client.show_with_classes(params[:id])
 
         render json: client
+    end
+
+    def create_class
+        cls = Client.create_class(params[:name_class], params[:description]).as_json
+
+        render json: cls
     end
 end
