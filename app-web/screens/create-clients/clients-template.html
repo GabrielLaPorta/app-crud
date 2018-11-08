@@ -1,43 +1,85 @@
-<div class="container-fluid">
-    <h2>Clients</h2>
-    <button class="btn btn-secondary" data-ng-click="vm.openCreateClientArea()">Create Client</button>
-    <form data-ng-if="vm.editClientAreaOpened" novalidate>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" 
+            data-ui-sref="clients">
+            Clients
+        </li>
+        <li class="breadcrumb-item active" 
+            data-ui-sref="classes">
+            Classes
+        </li>
+    </ol>
+</nav>
+<div class="container">
+    <button class="btn btn-secondary" 
+    data-ng-click="vm.openCreateClientArea()"
+    data-ng-disabled="vm.createClientAreaOpened">
+        Create Client
+    </button>
+    <form name="formClient" data-ng-if="vm.createClientAreaOpened" novalidate>
         <div class="form-group">
-            <label>Name</label>
-            <input class="form-control" type="text" data-ng-model="vm.client.name">
+            <label>Name *</label>
+            <input class="form-control" type="text" 
+            placeholder="Name"
+            data-ng-model="vm.client.name"
+            data-ng-required="true">
         </div>
         <div class="form-group">
-            <label>E-mail</label>
-            <input class="form-control" type="email" data-ng-model="vm.client.email">
+            <label>E-mail *</label>
+            <input class="form-control" type="email" 
+            placeholder="ex.:jon@email.com"
+            data-ng-model="vm.client.email" 
+            data-ng-required="true">
         </div>
         <div class="form-group">
-            <label>Age</label>
-            <input class="form-control" type="number" data-ng-model="vm.client.age">
+            <label>Age *</label>
+            <input class="form-control" type="number" maxlength="3" 
+            placeholder="age"
+            data-ng-model="vm.client.age"
+            data-ng-required="true">
+            <small>*required field</small>
         </div>
-        <button class="btn btn-primary" data-ng-click="vm.createClient()">Save</button>
+        <button class="btn btn-primary" data-ng-click="vm.createClient()" 
+        data-ng-disabled="formClient.$invalid"> 
+            Save
+        </button>
+        <button class="btn btn-secondary" data-ng-click="vm.openCreateClientArea()">
+            Cancel
+        </button>
     </form>
-</div>
-<div class="container-fluid">
+</div><br>
+<div class="container">
     <table class="table table-striped">
         <thead>
-            <tr class="table-primary">
-                <th>Id</th>
-                <th>Name</th>
-                <th>E-mail</th>
-                <th>Age</th>
+            <tr>
+                <th>
+                    <a href="#" data-ng-click="vm.getField('name')">Name</a>
+                </th>
+                <th>
+                    <a href="#" data-ng-click="vm.getField('email')">E-mail</a>
+                </th>
+                <th>
+                   <a href="#" data-ng-click="vm.getField('age')">Age</a>
+                </th>
+                <th>Classes</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="client in vm.clients">
-                <td>{{client.id}}</td>
+            <tr data-ng-repeat="client in vm.clients | orderBy: vm.colName :vm.reverse">
                 <td>{{client.name}}</td>
                 <td>{{client.email}}</td>
-                <td>{{client.age}}</td>
-                <td style="width: 79px">
-                    <button class="btn btn-info" data-ng-click="vm.editClientPageGo(client)">Edit</button>
+                <td>{{client.age}} years</td>
+                <td>
+                    <span class="class-list" title="{{class.description}}" 
+                    data-ng-repeat="class in client.classes">
+                        {{class.name}}  
+                    </span>
                 </td>
-                <td style="width: 98px">
-                    <button class="btn btn-danger" data-ng-click="vm.deleteClient(client)">Delete</button>
+                <td>
+                    <button class="btn btn-info" data-ng-click="vm.editClientPageGo(client)">
+                        + Details
+                    </button>
                 </td>
             </tr>
         </tbody>

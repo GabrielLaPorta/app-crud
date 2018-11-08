@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Client < ApplicationRecord
     has_many :addresses
     connection = ActiveRecord::Base.connection
@@ -6,49 +8,125 @@ class Client < ApplicationRecord
     self.primary_key = 'id'
 
     def as_json(options = nil)
-        serializable_hash(options)
+    serializable_hash(options)
     end
 
-    def self.index_with_classes
-        result = connection.exec_query(
-            'SELECT CLT.id,
-            CLT.name,
-            CLT.email,
-            CLT.age,
-            CLS.name_class,
-            CLS.description
+    def self.find_clients
+        clients_with_classes = []
+
+        clients = connection.exec_query(
+            "SELECT
+                CLT.id,
+                CLT.name,
+                CLT.email,
+                CLT.age,
+                CLS.name_class,
+                CLS.description
             FROM Clients AS CLT
-            INNER JOIN Clients_Classes AS CC ON CLT.id = CC.client_id
-            INNER JOIN Classes AS CLS ON CC.class_id = CLS.id'
+            LEFT JOIN Clients_Classes AS CC
+                ON CLT.id = CC.client_id
+            LEFT JOIN Classes AS CLS
+                ON CC.class_id = CLS.id
+            ORDER BY CLT.name"
         )
 
-        result.rows.each do |client|
-            if client[1]
+        clients.to_hash.each do |client|
+            index_client = clients_with_classes.index {|cl| cl[:id] == client['id']}
+
+            if index_client.nil?
+                clients_with_classes.push({
+                    id: client['id'],
+                    name: client['name'],
+                    email: client['email'],
+                    age: client['age'],
+                    classes: [
+                        {
+                            name: client['name_class'],
+                            description: client['description']
+                        }
+                    ]
+                })
+            else
+                clients_with_classes[index_client][:classes].push(
+                    {
+                        name: client['name_class'],
+                        description: client['description']
+                    }
+                )
+            end 
+        end
+
+        clients_with_classes
+
+    end
+
+    def self.find_by_id(client_id)
+        classes = []
+        addresses = []
+        classes_id = []
+
+        client = connection.exec_query(
+            "SELECT
+                CLT.id AS client_id,
+                CLT.name,
+                CLT.email,
+                CLT.age,
+                CLS.id AS class_id,
+                CLS.name_class,
+                CLS.description,
+                ADR.id AS address_id,
+                ADR.address,
+                ADR.city,
+                ADR.zip_code
+            FROM Clients AS CLT
+            LEFT JOIN Clients_Classes AS CC
+                ON CLT.id = CC.client_id
+            LEFT JOIN Classes AS CLS
+                ON CC.class_id = CLS.id
+            LEFT JOIN Addresses AS ADR
+                ON ADR.client_id = CLT.id
+            WHERE CLT.id = #{client_id}
+            ORDER BY CLT.name"
+        )
+
+        client.to_hash.each do |item|
+            has_address = addresses.detect do |address|
+            address[:id] == item['address_id']
             end
+            has_class_id = classes_id.include? item['class_id'].to_s
+            has_classes = classes.detect do |cls|
+                cls[:id] == item['class_id']
+            end
+            unless has_address
+                addresses.push(
+                    id: item['address_id'],
+                    address: item['address'],
+                    city: item['city'],
+                    zip_code: item['zip_code']
+                )
+            end
+
+            unless has_classes
+                classes.push(
+                    id: item['class_id'],
+                    name: item['name_class'],
+                    description: item['description']
+                )
+            end
+
+            classes_id.push(item['class_id'].to_s) unless has_class_id
         end
-        return result
 
-    end
+        result = {
+            id: client.to_hash[0]['client_id'],
+            name: client.to_hash[0]['name'],
+            email: client.to_hash[0]['email'],
+            age: client.to_hash[0]['age'],
+            classes: classes,
+            classes_id: classes_id,
+            addresses: addresses
+        }
 
-    def self.show_with_classes(id)
-        result = [];
-        
-        classes = connection.exec_query("SELECT CC.client_id, CC.class_id, CC.id FROM Clients_Classes AS CC WHERE CC.client_id = #{id}")
-
-        id_classes = classes.rows.map {|row| row[1]}
-
-        id_classes.each do |id_class|
-            search = connection.exec_query("SELECT Cls.name_class, Cls.description FROM Classes AS Cls WHERE Cls.id = #{id_class}")
-                result.push(search[0])
-        end
-
-        client = connection.exec_query("SELECT * FROM Clients AS CTS WHERE CTS.id = #{id}")
-
-        return result.concat client
-
-    end
-
-    def self.create_class(name_class, description)
-        connection.exec_query("INSERT INTO Classes VALUES ('#{name_class}', '#{description}')")
+        result
     end
 end

@@ -5,15 +5,42 @@
         .module("appCrud")
         .controller("ClientsController", ClientsController);
 
-        ClientsController.$inject = ["dataAppCrudService", "$state"];
+        ClientsController.$inject = ["dataAppCrudService", "$state", "$interval"];
 
-        function ClientsController(dataAppCrudService, $state) {
+        function ClientsController(dataAppCrudService, $state, $interval) {
             const vm = this;
 
-            vm.editClientAreaOpened = false;
+            vm.createClientAreaOpened = false;
+            vm.reverse = "reverse";
 
             getAllClients();
 
+            vm.createClient = () => {
+                dataAppCrudService
+                .clientResource()
+                    .create(vm.client)
+                    .$promise
+                    .then(response => {
+                        getAllClients();
+                        vm.createClientAreaOpened = false;
+                    }).catch(error => {
+                        console.error(error);
+                    });
+            };
+
+            vm.openCreateClientArea = () => {
+                vm.createClientAreaOpened = !vm.createClientAreaOpened;
+            };
+            
+            vm.editClientPageGo = (client) => {
+            $state.go("editClients", {id: client.id});
+            };
+
+            vm.getField = (col) => {
+                vm.reverse = !vm.reverse;
+                vm.colName = col;
+            };
+            
             function getAllClients() {
                 dataAppCrudService
                     .clientResource()
@@ -27,38 +54,5 @@
                     });
             };
 
-            vm.createClient = () => {
-                dataAppCrudService
-                    .clientResource()
-                    .create(vm.client)
-                    .$promise
-                    .then(response => {
-                        $state.reload();
-                        console.log(`Client ${response.name} created`);
-                    }).catch(error => {
-                        console.error(error);
-                    });
-            };
-
-            vm.openCreateClientArea = () => {
-                vm.editClientAreaOpened = !vm.editClientAreaOpened;
-            };
-
-            vm.editClientPageGo = (client) => {
-                $state.go("editClients", {id: client.id});
-            };
-
-            vm.deleteClient = (client) => {
-                dataAppCrudService
-                    .clientResource()
-                    .delete(client)
-                    .$promise
-                    .then(response => {
-                        $state.reload();
-                        console.log(`Client ${response.name} deleted`);
-                    }).catch(error => {
-                        console.error(error);
-                    });
-            };            
         }
-})(window.angular);
+    })(window.angular);

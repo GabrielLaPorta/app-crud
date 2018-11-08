@@ -3,7 +3,7 @@ class Api::AddressesController < ApplicationController
     def index
         addresses = Address.all.as_json
         addresses.map{ |addresses|
-            addresses['clients'] = Client.where(id: addresses['client_id'])   
+            addresses['clients'] = Client.where(id: addresses['client_id'])
         }
 
         render json: addresses

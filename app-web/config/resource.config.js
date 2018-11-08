@@ -9,8 +9,7 @@
                     method: 'POST'
                 },
                 get: {
-                    method: 'GET',
-                    params: {id: true}
+                    method: 'GET'
                 },
                 getAll: {
                     method: 'GET',

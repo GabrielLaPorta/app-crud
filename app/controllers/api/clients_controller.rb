@@ -1,17 +1,17 @@
 class Api::ClientsController < ApplicationController
 
-    # def index_with_classes
-    #     clients = Client.index_with_classes
-
-    #     render json: clients
-    # end
-
     def index
-        render json: Client.all.as_json({include: :addresses})
+        client = Client.find_clients.as_json
+
+        render json: client
     end
     
     def show
-        render json: Client.find(params[:id]).as_json({include: :addresses})
+        client = Client.find_by_id(
+            params[:id]
+        ).as_json
+
+        render json: client
     end
 
     def create
@@ -31,33 +31,29 @@ class Api::ClientsController < ApplicationController
         client.age = params[:age]
         client.save
 
+        ClientAndClass.delete_client_and_class(
+            params[:id]
+        )
+        ClientAndClass.create_client_and_class(
+            params[:id], 
+            params[:classList]
+        )
+
         render json: client
     end
 
     def destroy
         client = Client.find(params[:id])
-        addresses = Address.where(client_id: params[:id])
+        addresses = Address.where(
+            client_id: params[:id]
+        )
         addresses.destroy_all
+        cls = ClientAndClass.where(
+            client_id: params[:id]
+        )
+        cls.destroy_all
         client.destroy
 
         render json: client
-    end
-
-    def index_with_classes
-        client = Client.index_with_classes.as_json
-
-        render json: client
-    end
-
-    def show_with_classes
-        client = Client.show_with_classes(params[:id])
-
-        render json: client
-    end
-
-    def create_class
-        cls = Client.create_class(params[:name_class], params[:description]).as_json
-
-        render json: cls
     end
 end

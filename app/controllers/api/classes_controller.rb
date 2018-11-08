@@ -1,7 +1,7 @@
 class Api::ClassesController < ApplicationController
     
     def index
-        classes = Classes.all.as_json
+        classes = Classes.index_with_clients
         
         render json: classes
     end
@@ -14,7 +14,7 @@ class Api::ClassesController < ApplicationController
 
     def create
         cls = Classes.new
-        cls.name = params[:name]
+        cls.name_class = params[:name]
         cls.description = params[:description]
         cls.save
     
@@ -23,7 +23,7 @@ class Api::ClassesController < ApplicationController
 
     def update
         cls = Classes.find(params[:id])
-        cls.name = params[:name]
+        cls.name_class = params[:name]
         cls.description = params[:description]
         cls.save
 
@@ -32,9 +32,10 @@ class Api::ClassesController < ApplicationController
 
     def destroy
         cls = Classes.find(params[:id])
+        association = ClientAndClass.where(class_id: params[:id])
+        association.destroy_all
         cls.destroy
     
         render json: cls
-    end 
-
+    end
 end

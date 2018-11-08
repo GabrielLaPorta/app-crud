@@ -1,63 +1,171 @@
-<div class="container-fluid" v>
-    <h2>Client</h2>
-    <a class="btn btn-secondary" ui-sref="clients">◄</a>
-    <form novalidate>
-        <div class="form-group">
-            <label>Name</label>
-            <input class="form-control" type="text" data-ng-model="vm.client.name">
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" data-ui-sref="clients">
+            Clients
+        </li>
+        <li class="breadcrumb-item active" data-ui-sref="classes">
+            Classes
+        </li>
+        <li class="button-edit-client">
+            <button class="btn btn-secondary" data-ng-click="vm.openEditClientArea()" 
+            data-ng-disabled="vm.editClientAreaOpened">
+                Edit
+            </button>
+            <button class="btn btn-danger" data-ng-click="vm.deleteClient()">
+                Delete Client
+            </button>
+        </li>
+    </ol>
+</nav>
+<div class="row">
+    <div class="container">
+        <form name="formClient" 
+        data-ng-show="vm.editClientAreaOpened" 
+        novalidate>
+            <div class="form-group">
+                <label>Name *</label>
+                <input class="form-control" type="text"
+                placeholder="Name" 
+                data-ng-model="vm.client.name"
+                data-ng-required="true">
+            </div>
+            <div class="form-group">
+                <label>E-mail *</label>
+                <input class="form-control" type="email" 
+                placeholder="ex.:jon@email.com"
+                data-ng-model="vm.client.email"
+                data-ng-required="true">
+            </div>
+            <div class="form-group">
+                <label>Age *</label>
+                <input class="form-control" type="number" 
+                placeholder="age"
+                data-ng-model="vm.client.age"
+                data-ng-required="true">
+            </div>
+            <div class="form-group">
+                <label>Classes</label>
+                <select class="form-control custom-select" 
+                data-ng-model="vm.classList" multiple>
+                    <option title="{{class.description}}" 
+                    ng-repeat="class in vm.classes" 
+                    value="{{class.id}}">
+                        {{class.name}}
+                    </option>
+                </select>
+                <small>*required field</small>
+            </div>
+            <button type="submit" class="btn btn-primary" 
+            data-ng-click="vm.updateClient()"
+            data-ng-disabled="formClient.$invalid">
+                Save
+            </button>
+            <button class="btn btn-secondary" data-ng-click="vm.openEditClientArea()">
+                Cancel
+            </button>
+        </form>
+        <div data-ng-show="!vm.editClientAreaOpened">
+            <div class="form-group">
+                <label>Name</label>
+                <h4>{{vm.client.name}}</h4>
+            </div>
+            <div class="form-group">
+                <label>E-mail</label>
+                <h6>{{vm.client.email}}</h6>
+            </div>
+            <div class="form-group">
+                <label>Age</label>
+                <h6>{{vm.client.age}} years</h6>
+            </div>
+            <div class="form-group" data-ng-show="vm.client.classes[0].id === null ? false : true">
+                <label>Classes</label>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-ng-repeat="class in vm.client.classes">
+                            <td>{{class.name}}</td>
+                            <td>{{class.description}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div class="form-group">
-            <label>E-mail</label>
-            <input class="form-control" type="email" data-ng-model="vm.client.email">
-        </div>
-        <div class="form-group">
-            <label>Age</label>
-            <input class="form-control" type="number" data-ng-model="vm.client.age">
-        </div>
-        <button class="btn btn-primary" data-ng-click="vm.updateClient()">Save</button>
-    </form>
-</div>
-<div class="container-fluid">
-    <button class="btn btn-secondary" data-ng-click="vm.openCreateAddressArea()">Create Address</button>
-    <form data-ng-if="vm.editAddressAreaOpened" novalidate>
-        <div class="form-group">
-            <label>Address</label>
-            <input class="form-control" type="text" data-ng-model="vm.address.address">
-        </div>
-        <div class="form-group">
-            <label>City</label>
-            <input class="form-control" type="text" data-ng-model="vm.address.city">
-        </div>
-        <div class="form-group">
-            <label>Zip Code</label>
-            <input class="form-control" type="text" data-ng-model="vm.address.zip_code">
-        </div>
-        <button class="btn btn-primary" data-ng-click="vm.saveAddress()">Save</button>
-    </form>
-</div>
-<div class="container-fluid">
-    <table class="table table-striped">
-        <thead>
-            <tr class="table-primary">
-                <th>Id</th>
-                <th>Address</th>
-                <th>City</th>
-                <th>Zip Code</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr data-ng-repeat="address in vm.client.addresses">
-                <td>{{address.id}}</td>
-                <td>{{address.address}}</td>
-                <td>{{address.city}}</td>
-                <td>{{address.zip_code}}</td>
-                <td style="width: 79px">
-                    <button class="btn btn-info" data-ng-click="vm.openEditAddressArea(address)">Edit</button>
-                </td>
-                <td style="width: 98px">
-                    <button class="btn btn-danger" data-ng-click="vm.deleteAddress(address)">Delete</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    </div>
+</div><br>
+<div class="row">
+    <div class="container" >
+        <button class="btn btn-secondary" 
+        data-ng-click="vm.openCreateAddressArea()"
+        data-ng-disabled="vm.editAddressAreaOpened">
+            Create Address
+        </button><br>
+        <form name="formAddress" class="class-table" data-ng-if="vm.editAddressAreaOpened" novalidate>
+            <div class="form-group">
+                <label>Address *</label>
+                <input class="form-control" type="text" 
+                placeholder="ex.:3525  Lady Bug Drive"
+                data-ng-model="vm.address.address"
+                data-ng-required="true">
+            </div>
+            <div class="form-group">
+                <label>City *</label>
+                <input class="form-control" type="text"
+                placeholder="ex.:Staten Island"
+                data-ng-model="vm.address.city"
+                data-ng-required="true">
+            </div>
+            <div class="form-group">
+                <label>Zip Code</label>
+                <input class="form-control" type="text" 
+                placeholder="ex.:10312"
+                data-ng-model="vm.address.zip_code">
+                <small>*required field</small>
+            </div>
+            <button class="btn btn-primary" 
+            data-ng-click="vm.saveAddress()"
+            data-ng-disabled="formAddress.$invalid">
+                Save
+            </button>
+            <button class="btn btn-secondary" data-ng-click="vm.openCreateAddressArea()">
+                Cancel
+            </button>
+        </form><br>
+        <table class="table table-bordered" 
+        data-ng-show="vm.client.addresses[0].id === null ? false : true">
+            <thead>
+                <tr>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>Zip Code</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-style="myStyle" data-ng-repeat="address in vm.client.addresses">
+                    <td>{{address.address}}</td>
+                    <td>{{address.city}}</td>
+                    <td>{{address.zip_code}}</td>
+                    <td>
+                        <button class="btn btn-primary" 
+                        data-ng-click="[vm.openEditAddressArea(address), 
+                        myStyle={'background-color':'#cdc9c9'}]"
+                        data-ng-disabled="vm.editAddressAreaOpened">
+                            Edit
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger" data-ng-click="vm.deleteAddress(address)">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

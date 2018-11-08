@@ -13,7 +13,7 @@
 
             $urlMatcherFactoryProvider.caseInsensitive(true);
 
-            $urlRouterProvider.otherwise("/clients");
+            // $urlRouterProvider.otherwise("/clients");
 
             $stateProvider
                 .state("clients", {
@@ -36,6 +36,17 @@
                     },
                     templateUrl: "screens/edit-client/edit-client-template.html",
                     url: "/clients/:id"
-                });
+                })
+                .state("classes", {
+                    controller: "ClassesController",
+                    controllerAs: "vm",
+                    params: {
+                        id: {
+                            dynamic: true
+                        }
+                    },
+                    templateUrl: "screens/create-classes/classes-template.html",
+                    url: "/classes"
+                })
         });
 })(window.angular);
